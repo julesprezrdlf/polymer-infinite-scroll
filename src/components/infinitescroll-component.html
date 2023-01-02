@@ -36,21 +36,10 @@
             value: function () {
               return [];
             }
-          },
-          arrayControl:{
-            type: Array,
-            value: function () {
-              return ['uno'];
-            }
-          },
-          controlador:{
-            type: String,
-            value: 'soy un controlador'
           }
+
         }
       }
-
-
 
       // Hook de inicio
       connectedCallback() {
@@ -68,15 +57,8 @@
 
       ready() {
         super.ready();
-        window.addEventListener('scroll', this.scrollDetection);
-        console.log(this.controlador);
-        console.log('ready ' + this.arrayControl);
+        window.addEventListener('scroll', this.scrollDetection.bind(this));
 
-      }
-
-      funcionPrueba(){
-        this.push('arrayControlador',this.controlador);
-        console.log('esto es el array de control ' + this.arrayControl);
       }
 
       scrollDetection() {
@@ -84,19 +66,11 @@
         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
         if (bottomOfWindow) {
           axios.get(`https://randomuser.me/api/?results=`).then(response => {
-          //   this.controlador = 'controladorActualizado';
-          //  this.funcionPrueba;
-          //   console.log(this.arrayControl);
-          //   console.log(this.controlador);
-          //   console.log(response.data.results);
-          console.log("axios carga");
+            this.push("users", response.data.results[0]);
           });
 
-
-          console.log("End of Scroll");
         }
       }
-
 
     }
 
