@@ -1,0 +1,105 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="infinitescroll-component">
+  <template>
+    <style>
+      :host {
+        display: block;
+        margin: 15px;
+      }
+    </style>
+
+
+    <template is="dom-repeat" items="[[users]]" as="user">
+      <p>[[user.name.first]]</p>
+      <p>[[user.name.last]]</p>
+      <hr>
+    </template>
+  </template>
+
+  <!-- Importing Axios  -->
+  <!-- <script src="node_modules/axios/dist/axios.min.js"></script> why it doesnt work?-->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- General Script -->
+  <script>
+    class InfiniteScroll extends Polymer.Element {
+      static get is() {
+        return 'infinitescroll-component';
+      }
+      static get properties() {
+        return {
+
+          users: {
+            type: Array,
+            value: function () {
+              return [];
+            }
+          },
+          arrayControl:{
+            type: Array,
+            value: function () {
+              return ['uno'];
+            }
+          },
+          controlador:{
+            type: String,
+            value: 'soy un controlador'
+          }
+        }
+      }
+
+
+
+      // Hook de inicio
+      connectedCallback() {
+        super.connectedCallback();
+        this.getInitialUsers();
+      }
+
+      getInitialUsers() {
+        axios.get(`https://randomuser.me/api/?results=20`).then((response) => {
+          this.users = response.data.results;
+        });
+      }
+
+      // -------------------------------------
+
+      ready() {
+        super.ready();
+        window.addEventListener('scroll', this.scrollDetection);
+        console.log(this.controlador);
+        console.log('ready ' + this.arrayControl);
+
+      }
+
+      funcionPrueba(){
+        this.push('arrayControlador',this.controlador);
+        console.log('esto es el array de control ' + this.arrayControl);
+      }
+
+      scrollDetection() {
+
+        let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+        if (bottomOfWindow) {
+          axios.get(`https://randomuser.me/api/?results=`).then(response => {
+          //   this.controlador = 'controladorActualizado';
+          //  this.funcionPrueba;
+          //   console.log(this.arrayControl);
+          //   console.log(this.controlador);
+          //   console.log(response.data.results);
+          console.log("axios carga");
+          });
+
+
+          console.log("End of Scroll");
+        }
+      }
+
+
+    }
+
+    window.customElements.define(InfiniteScroll.is, InfiniteScroll);
+  </script>
+</dom-module>
