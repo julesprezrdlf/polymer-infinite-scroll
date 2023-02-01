@@ -65,8 +65,12 @@
 
         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
         if (bottomOfWindow) {
-          axios.get(`https://randomuser.me/api/?results=`).then(response => {
-            this.push("users", response.data.results[0]);
+          axios.get(`https://randomuser.me/api/?results=5`).then(response => {
+            for (let index = 0; index < 5; index++) {
+              this.push("users", response.data.results[index]);
+
+            }
+
           });
 
         }
